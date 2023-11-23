@@ -128,6 +128,28 @@ jobs:
             exit 1
           fi
 
+  frontend-e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout s3gw UI
+        uses: actions/checkout@v3
+
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: src/frontend
+        run: npm ci
+
+      - name: Run E2E Tests
+        working-directory: src/frontend
+        run: npm run e2e:ci
+
   # Build and push the ui container
   build-s3gw-ui-container:
     runs-on: ubuntu-latest
